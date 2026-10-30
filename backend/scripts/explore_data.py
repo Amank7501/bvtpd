@@ -6,13 +6,7 @@ Run from the backend folder (after download_data):
 
 import pandas as pd
 
-from app.config import ACTUALS_CSV, FORECASTS_CSV
-
-
-def load() -> tuple[pd.DataFrame, pd.DataFrame]:
-    actuals = pd.read_csv(ACTUALS_CSV, parse_dates=["start_time"])
-    forecasts = pd.read_csv(FORECASTS_CSV, parse_dates=["start_time", "publish_time"])
-    return actuals, forecasts
+from app.data_store import load_actuals, load_forecasts
 
 
 def report_actuals(actuals: pd.DataFrame) -> None:
@@ -61,7 +55,7 @@ def show_example(forecasts: pd.DataFrame, actuals: pd.DataFrame) -> None:
 
 
 def main() -> None:
-    actuals, forecasts = load()
+    actuals, forecasts = load_actuals(), load_forecasts()
     report_actuals(actuals)
     report_forecasts(forecasts)
     show_example(forecasts, actuals)

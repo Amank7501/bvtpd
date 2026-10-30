@@ -1,6 +1,6 @@
 """Project-wide settings: where data comes from and which period we care about."""
 
-from datetime import date
+from datetime import date, time
 from pathlib import Path
 
 ELEXON_BASE_URL = "https://data.elexon.co.uk/bmrs/api/v1"
@@ -11,6 +11,11 @@ DECISION_START = date(2026, 1, 1)
 DECISION_END = date(2026, 1, 31)
 DELIVERY_START = date(2026, 1, 2)
 DELIVERY_END = date(2026, 2, 1)
+
+# Day-ahead orders must be in by this UK local time on the day before delivery.
+# The forecast used for a delivery day is the latest one published before it.
+MARKET_TZ = "Europe/London"
+DECISION_DEADLINE_LOCAL = time(9, 0)
 
 # Forecasts reach ~3 days ahead, so start fetching a few days before the
 # first delivery day to capture every forecast made for it.
