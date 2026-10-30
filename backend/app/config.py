@@ -1,5 +1,6 @@
 """Project-wide settings: where data comes from and which period we care about."""
 
+import os
 from datetime import date, time
 from pathlib import Path
 
@@ -20,6 +21,10 @@ DECISION_DEADLINE_LOCAL = time(9, 0)
 # Forecasts reach ~3 days ahead, so start fetching a few days before the
 # first delivery day to capture every forecast made for it.
 FORECAST_LOOKBACK_DAYS = 4
+
+# Websites allowed to call the API from a browser (comma-separated).
+# Locally the React dev server runs on :5173; in production set this to the deployed frontend URL.
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 ACTUALS_CSV = DATA_DIR / "actuals.csv"

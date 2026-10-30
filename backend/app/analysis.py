@@ -20,7 +20,7 @@ def decision_cutoff(delivery_day: date, deadline: time = DECISION_DEADLINE_LOCAL
     return local.tz_localize(MARKET_TZ).tz_convert("UTC")
 
 
-def _local_day(times: pd.Series) -> pd.Series:
+def local_day(times: pd.Series) -> pd.Series:
     return times.dt.tz_convert(MARKET_TZ).dt.date
 
 
@@ -32,7 +32,7 @@ def select_day_ahead_forecasts(
     Returns columns: start_time, publish_time, forecast_mw.
     """
     df = forecasts.copy()
-    days = _local_day(df["start_time"])
+    days = local_day(df["start_time"])
     cutoffs = {day: decision_cutoff(day, deadline) for day in days.unique()}
     df["cutoff"] = pd.to_datetime(days.map(cutoffs), utc=True)
 
@@ -111,7 +111,7 @@ def error_by_hour_of_day(compared: pd.DataFrame) -> pd.DataFrame:
 
 def daily_summary(compared: pd.DataFrame) -> pd.DataFrame:
     """Accuracy per delivery day, plus the single worst hour of each day."""
-    day = _local_day(compared["start_time"]).rename("delivery_day")
+    day = local_day(compared["start_time"]).rename("delivery_day")
     result = _group_metrics(compared, day)
     result["max_abs_error_mw"] = compared.groupby(day)["error_mw"].apply(lambda e: e.abs().max())
     return result.reset_index()
