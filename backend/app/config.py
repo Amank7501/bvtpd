@@ -1,0 +1,21 @@
+"""Project-wide settings: where data comes from and which period we care about."""
+
+from datetime import date
+from pathlib import Path
+
+ELEXON_BASE_URL = "https://data.elexon.co.uk/bmrs/api/v1"
+
+# Purchase decisions are made in January 2026, one day before delivery.
+# So delivery days run from 2 Jan to 1 Feb 2026.
+DECISION_START = date(2026, 1, 1)
+DECISION_END = date(2026, 1, 31)
+DELIVERY_START = date(2026, 1, 2)
+DELIVERY_END = date(2026, 2, 1)
+
+# Forecasts reach ~3 days ahead, so start fetching a few days before the
+# first delivery day to capture every forecast made for it.
+FORECAST_LOOKBACK_DAYS = 4
+
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+ACTUALS_CSV = DATA_DIR / "actuals.csv"
+FORECASTS_CSV = DATA_DIR / "forecasts.csv"
